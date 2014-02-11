@@ -43,3 +43,9 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# protobuf for message
+gem 'protobuf'
+
+# zmq for transport
+gem 'ffi-rzmq'
