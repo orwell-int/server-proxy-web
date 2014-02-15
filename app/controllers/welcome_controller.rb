@@ -13,6 +13,19 @@ def error_check(rc)
 end
 
 class WelcomeController < ApplicationController
+  @@socket = nil
+  def initialize
+    super
+    if nil == @@socket
+      ctx = ZMQ::Context.new
+      @@socket = ctx.socket ZMQ::PUSH
+      @@socket.setsockopt(ZMQ::LINGER, 1)
+      rc = @@socket.connect("tcp://192.168.1.40:9000")
+      error_check(rc)
+      puts "Socket created"
+    end
+  end
+    
   def index
     data = params[:data]
     print "BATMAN goes ", data, "\n"
@@ -42,15 +55,10 @@ class WelcomeController < ApplicationController
 	  :weapon1 => fire_weapon1,
 	  :weapon2 => fire_weapon2))
       print "input = '", input.to_json, "'\n"
-      ctx = ZMQ::Context.new
-      socket = ctx.socket ZMQ::PUSH
-      socket.setsockopt(ZMQ::LINGER, 1)
-      rc = socket.connect("tcp://192.168.1.40:9000")
-      error_check(rc)
       bytes = input.to_s
       zmq_message = "TANK_0 Input " + bytes
       print "bytes = '" + bytes.inspect + "'\n"
-      socket.send_string(zmq_message)
+      @@socket.send_string(zmq_message)
       print "zmq_message = '" + zmq_message + "'\n"
     end
   end
