@@ -45,7 +45,9 @@ end
 # gem 'debugger', group: [:development, :test]
 
 # protobuf for message
-gem 'protobuf'
+gem 'ruby-protocol-buffers'
+# for faster encoding / decoding
+gem 'varint'
 
 # zmq for transport
 gem 'ffi-rzmq'

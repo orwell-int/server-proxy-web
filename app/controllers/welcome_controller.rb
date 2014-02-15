@@ -45,9 +45,9 @@ class WelcomeController < ApplicationController
       ctx = ZMQ::Context.new
       socket = ctx.socket ZMQ::PUSH
       socket.setsockopt(ZMQ::LINGER, 1)
-      rc = socket.connect("tcp://127.0.0.1:9000")
+      rc = socket.connect("tcp://192.168.1.40:9000")
       error_check(rc)
-      bytes = input.encode
+      bytes = input.to_s
       zmq_message = "TANK_0 Input " + bytes
       print "bytes = '" + bytes.inspect + "'\n"
       socket.send_string(zmq_message)
