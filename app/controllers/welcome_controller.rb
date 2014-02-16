@@ -14,13 +14,14 @@ end
 
 class WelcomeController < ApplicationController
   @@socket = nil
+  @@context = nil
   def initialize
     super
     if nil == @@socket
-      ctx = ZMQ::Context.new
-      @@socket = ctx.socket ZMQ::PUSH
-      @@socket.setsockopt(ZMQ::LINGER, 1)
-      rc = @@socket.connect("tcp://192.168.1.40:9000")
+      @@context = ZMQ::Context.new
+      @@socket = @@context.socket ZMQ::PUSH
+      @@socket.setsockopt(ZMQ::LINGER, 0)
+      rc = @@socket.connect("tcp://192.168.1.37:9000")
       error_check(rc)
       puts "Socket created"
     end
@@ -57,9 +58,11 @@ class WelcomeController < ApplicationController
       print "input = '", input.to_json, "'\n"
       bytes = input.to_s
       zmq_message = "TANK_0 Input " + bytes
-      print "bytes = '" + bytes.inspect + "'\n"
-      @@socket.send_string(zmq_message)
-      print "zmq_message = '" + zmq_message + "'\n"
+      #print "bytes = '" + bytes.inspect + "'\n"
+      rc = @@socket.send_string(zmq_message)
+      if (not error_check(rc))
+	print "zmq_message = " + zmq_message.inspect + "'\n"
+      end
     end
   end
 end
