@@ -1,0 +1,8 @@
+.keep
+.bundle
+db/*.sqlite3
+db/*.sqlite3-journal
+log/*.log
+tmp/
+.DS_Store
+app/messages/*.pb.rb
