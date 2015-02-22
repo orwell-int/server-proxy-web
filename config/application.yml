@@ -1,0 +1,18 @@
+defaults: &defaults
+    # http://72.240.51.211/axis-cgi/mjpg/video.cgi?resolution=352x240&camera=1&dummy=garb
+    # http://24.172.104.226/axis-cgi/mjpg/video.cgi?resolution=CIF&dummy=1405190505386
+    # http://webcam1.lpl.org/mjpg/video.mjpg
+    # http://193.201.74.114/mjpg/video.mjpg
+    videofeed: "http://25.186.203.241:9100/videofeed"
+    #videofeed: "http://192.168.1.37:9100/videofeed"
+    push_address: "tcp://192.168.1.37:9001"
+    subscribe_address: "tcp://192.168.1.37:9000"
+
+development:
+    <<: *defaults
+
+test:
+    <<: *defaults
+
+production:
+    <<: *defaults
