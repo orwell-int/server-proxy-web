@@ -1,3 +1,4 @@
+var gLastEvent = ""
 $( document ).ready(
 	function()
 	{
@@ -13,48 +14,58 @@ $( document ).ready(
 		$( document ).keydown(
 			function(event)
 			{
+				var newEvent = ""
 				if( event.which == 37 )
 				{
 					event.preventDefault();
-					$("#textField").html("LEFT");
-					callServer("LEFT")
+					newEvent = "LEFT"
 				}
 				if( event.which == 38 )
 				{
 					event.preventDefault();
-					$("#textField").html("FORWARD");
-					callServer("FORWARD")
+					newEvent = "FORWARD"
 				}
 				if( event.which == 39 )
 				{
 					event.preventDefault();
-					$("#textField").html("RIGHT");
-					callServer("RIGHT")
+					newEvent = "RIGHT"
 				}
 				if( event.which == 40 )
 				{
 					event.preventDefault();
-					$("#textField").html("BACKWARD");
-					callServer("BACKWARD")
+					newEvent = "BACKWARD"
 				}
 				if( event.which == 32 )
 				{
 					event.preventDefault();
-					$("#textField").html("FIRE2");
-					callServer("FIRE2")
+					newEvent = "FIRE2"
 				}
 				if( event.which == 13 )
 				{
 					event.preventDefault();
-					$("#textField").html("FIRE1");
-					callServer("FIRE1")
+					newEvent = "FIRE1"
+				}
+				if ("" != newEvent)
+				{
+					if (newEvent != gLastEvent)
+					{
+						$("#textField").html(newEvent);
+						//console.log(newEvent)
+						callServer(newEvent)
+						gLastEvent = newEvent
+					}
 				}
 			}
 		);
 		$( document ).keyup(
 			function(event)
 			{
-				callServer("STOP")
+				if ("STOP" != gLastEvent)
+				{
+					//console.log("STOP")
+					callServer("STOP")
+					gLastEvent = "STOP"
+				}
 			}
 		);
 	}
