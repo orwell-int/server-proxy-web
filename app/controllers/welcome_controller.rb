@@ -4,11 +4,17 @@ require_relative '../messages/server-game.pb'
 
 class WelcomeController < ApplicationController
   def index
-    if (not session.key?(:welcome))
+    data = params[:data]
+    clean_session = "CLEAN_SESSION" == data
+    if ((not session.key?(:welcome)) or (clean_session))
       session[:routing_id] = ""
       session[:videofeed] = ""
       session[:welcome] = false
       session[:last_data] = nil
+    end
+    if (clean_session)
+      puts "Session cleaned"
+      return
     end
     if (not session[:welcome])
       hello = Orwell::Messages::Hello.new(:name => 'Batman')
@@ -37,6 +43,7 @@ class WelcomeController < ApplicationController
           video_address = welcome.video_address
           video_port = welcome.video_port
           session[:videofeed] = "http://" + video_address + ":" + video_port.to_s
+          @videofeed = session[:videofeed]
           print "robot = " + robot + "\n"
           print "id = " + session[:routing_id]
           print "video_address = " + video_address + "\n"
@@ -54,7 +61,6 @@ class WelcomeController < ApplicationController
       end
     end
     if (session[:welcome])
-      data = params[:data]
       print "BATMAN went ", session[:last_data], "\n"
       if (data == session[:last_data])
         return
