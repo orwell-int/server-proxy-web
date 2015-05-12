@@ -88,3 +88,8 @@ function callServer(data)
 		}
 	});
 }
+
+$( window ).load(function()
+{
+	callServer("CLEAN_SESSION")
+});
