@@ -8,7 +8,9 @@ defaults: &defaults
     push_address: "tcp://192.168.1.37:9001"
     subscribe_address: "tcp://192.168.1.37:9000"
     # UDP broadcast port on the game server
-    broadcast_port: "9080"
+    udp_broadcast_port: "9080"
+    udp_broadcast_retries: "5"
+    udp_broadcast_timeout: "10"
 
 development:
     <<: *defaults
