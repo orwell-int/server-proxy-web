@@ -15,7 +15,6 @@ class WelcomeController < ApplicationController
     end
     if (clean_session)
       puts "Session cleaned"
-      return
     end
     if (not session[:welcome])
       hello = Orwell::Messages::Hello.new(:name => 'Batman')
@@ -44,7 +43,6 @@ class WelcomeController < ApplicationController
           video_address = welcome.video_address
           video_port = welcome.video_port
           session[:videofeed] = "http://" + video_address + ":" + video_port.to_s
-          @videofeed = session[:videofeed]
           puts "robot = " + robot
           puts "id = " + session[:routing_id]
           puts "video_address = " + video_address
@@ -65,6 +63,7 @@ class WelcomeController < ApplicationController
     if (session[:welcome])
       print "BATMAN went ", session[:last_data], "\n"
       if (data == session[:last_data])
+        @videofeed = session[:videofeed]
         return
       end
       print "BATMAN goes ", data, "\n"
@@ -106,5 +105,6 @@ class WelcomeController < ApplicationController
       #print "bytes = '" + bytes.inspect + "'\n"
       Rails.application.zmq_send(zmq_message)
     end
+    @videofeed = session[:videofeed]
   end
 end
