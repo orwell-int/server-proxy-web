@@ -3,6 +3,7 @@ require_relative '../messages/controller.pb'
 require_relative '../messages/server-game.pb'
 
 class WelcomeController < ApplicationController
+
   def index
     data = params[:data]
     clean_session = "CLEAN_SESSION" == data
@@ -44,10 +45,11 @@ class WelcomeController < ApplicationController
           video_port = welcome.video_port
           session[:videofeed] = "http://" + video_address + ":" + video_port.to_s
           @videofeed = session[:videofeed]
-          print "robot = " + robot + "\n"
-          print "id = " + session[:routing_id]
-          print "video_address = " + video_address + "\n"
-          print "video_port = " + video_port.to_s + "\n"
+          puts "robot = " + robot
+          puts "id = " + session[:routing_id]
+          puts "video_address = " + video_address
+          puts "video_port = " + video_port.to_s
+          puts "videofeed = " + session[:videofeed]
           received = true
           session[:welcome] = true
         elsif ("Goodbye" == message_type)
