@@ -3,15 +3,26 @@ require_relative '../messages/controller.pb'
 require_relative '../messages/server-game.pb'
 
 class WelcomeController < ApplicationController
+  @@semaphore = Mutex.new
+  @@last_data = {}
+
+  #def initialize!(*)
+    #super
+  #end
 
   def index
+    @@semaphore.synchronize {
+      inner_index()
+    }
+  end
+
+  def inner_index
     data = params[:data]
     clean_session = "CLEAN_SESSION" == data
     if ((not session.key?(:welcome)) or (clean_session))
       session[:routing_id] = ""
       session[:videofeed] = ""
       session[:welcome] = false
-      session[:last_data] = nil
     end
     if (clean_session)
       puts "Session cleaned"
@@ -40,6 +51,7 @@ class WelcomeController < ApplicationController
           welcome = Orwell::Messages::Welcome.parse(payload)
           robot = welcome.robot
           session[:routing_id] = welcome.id
+          @@last_data[session[:routing_id]] = nil
           video_address = welcome.video_address
           video_port = welcome.video_port
           session[:videofeed] = "http://" + video_address + ":" + video_port.to_s
@@ -61,13 +73,13 @@ class WelcomeController < ApplicationController
       end
     end
     if (session[:welcome])
-      print "BATMAN went ", session[:last_data], "\n"
-      if (data == session[:last_data])
+      print "BATMAN went ", @@last_data[session[:routing_id]], "\n"
+      if (data == @@last_data[session[:routing_id]])
         @videofeed = session[:videofeed]
         return
       end
       print "BATMAN goes ", data, "\n"
-      session[:last_data] = data
+      @@last_data[session[:routing_id]] = data
       #left = 0.001
       #right = 0.001
       left = 0
