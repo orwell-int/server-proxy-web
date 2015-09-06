@@ -51,3 +51,6 @@ gem 'varint'
 
 # zmq for transport
 gem 'ffi-rzmq'
+
+# puma as asynchronous server
+gem 'puma'

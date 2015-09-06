@@ -7,6 +7,10 @@ Orwell::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  # SSE
+  #resources :events, only: [:new, :create, :index]
+  get 'events' => 'events#index'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -157,7 +157,7 @@ module Orwell
       zmq_message = ""
       rc = @subscribe_socket.recv_string(zmq_message)
       if (not error_check(rc))
-        print "subscribe zmq_message = " + zmq_message.inspect + "'\n"
+        #print "subscribe zmq_message = " + zmq_message.inspect + "'\n"
       end
       return zmq_message
     end
@@ -217,6 +217,8 @@ module Orwell
           puts "publisher_address = #{publisher_address.inspect}"
           push_address = puller_address.sub('*', sender)
           subscribe_address = publisher_address.sub('*', sender)
+          puts "push_address = #{push_address.inspect}"
+          puts "subscribe_address = #{subscribe_address.inspect}"
         end
         udp_socket.close
       end
