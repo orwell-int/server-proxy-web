@@ -162,6 +162,17 @@ module Orwell
       return zmq_message
     end
 
+    def zmq_receive_non_blocking()
+      zmq_message = ""
+      rc = @subscribe_socket.recv_string(zmq_message, ZMQ::DONTWAIT)
+      if ZMQ::Util.resultcode_ok?(rc)
+        #
+      else
+        zmq_message = nil
+      end
+      return zmq_message
+    end
+
     def initialize!(*)
       super
       push_address = ENV['push_address']

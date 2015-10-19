@@ -8,8 +8,8 @@ Orwell::Application.routes.draw do
   root 'welcome#index'
 
   # SSE
-  #resources :events, only: [:new, :create, :index]
-  get 'events' => 'events#index'
+  resources :events, only: [:new, :create, :index]
+  #get 'events' => 'events#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
