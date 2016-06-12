@@ -14,6 +14,8 @@ class EventsController < ApplicationController
     # do not know when this should finish yet
     finished = false
     new_message = true
+    #logger = Logger.new(STDOUT)
+    logger.datetime_format = "%Y-%m-%d %H:%M:%S:%L"
     begin
       begin
         if (new_message)
@@ -34,7 +36,13 @@ class EventsController < ApplicationController
             if (tid != "all_clients")
               next
             end
-            gamestate = Orwell::Messages::GameState.parse(payload)
+            begin
+              gamestate = Orwell::Messages::GameState.parse(payload)
+            rescue ProtocolBuffers::DecodeError => e
+              logger.error e.message + "\n " + e.backtrace.join("\n ")
+              #$stderr.print "Decoding failed: " + $!
+              raise
+            end
             if gamestate.playing
               #print "game running "
               if gamestate.has_winner?()
@@ -56,9 +64,11 @@ class EventsController < ApplicationController
             sse.write({status: status})
           end
           delta = after - before
-          puts "delta = " + delta.to_s
+          t = Time.now
+          puts "At " + t.strftime("%Y-%m-%d %H:%M:%S:%L").to_s + " - delta = " + delta.to_s
+          #logger.debug { "delta = " + delta.to_s }
         else
-          sleep 0.01
+          sleep 0.005
         end
       end until finished
     rescue IOError => e
