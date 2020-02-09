@@ -93,3 +93,17 @@ $( window ).load(function()
 {
 	callServer("CLEAN_SESSION")
 });
+
+if (typeof(EventSource) !== "undefined")
+{
+	var source = new EventSource("/events");
+	source.onmessage = function(event)
+	{
+		map = JSON.parse(event.data)
+		document.getElementById("status").innerHTML = map.status;
+	};
+}
+else
+{
+	document.getElementById("status").innerHTML = "Sorry, your browser does not support server-sent events...";
+}
